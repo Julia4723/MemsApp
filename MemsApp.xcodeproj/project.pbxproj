@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CEC27DB42D50898B00C7BD69 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CEC27DB32D50898B00C7BD69 /* Alamofire */; };
+		CEC27DBF2D50AAFA00C7BD69 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CEC27DBE2D50AAFA00C7BD69 /* Alamofire */; };
+		CEC27DF92D50B39F00C7BD69 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = CEC27DF82D50B39F00C7BD69 /* AlamofireImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEC27DB42D50898B00C7BD69 /* Alamofire in Frameworks */,
+				CEC27DBF2D50AAFA00C7BD69 /* Alamofire in Frameworks */,
+				CEC27DF92D50B39F00C7BD69 /* AlamofireImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +85,8 @@
 			);
 			name = MemsApp;
 			packageProductDependencies = (
-				CEC27DB32D50898B00C7BD69 /* Alamofire */,
+				CEC27DBE2D50AAFA00C7BD69 /* Alamofire */,
+				CEC27DF82D50B39F00C7BD69 /* AlamofireImage */,
 			);
 			productName = MemsApp;
 			productReference = CEC27D742D50889F00C7BD69 /* MemsApp.app */;
@@ -114,7 +117,8 @@
 			mainGroup = CEC27D6B2D50889F00C7BD69;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				CEC27DB22D50898B00C7BD69 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				CEC27DBD2D50AAFA00C7BD69 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				CEC27DF72D50B39F00C7BD69 /* XCRemoteSwiftPackageReference "AlamofireImage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CEC27D752D50889F00C7BD69 /* Products */;
@@ -352,7 +356,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CEC27DB22D50898B00C7BD69 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		CEC27DBD2D50AAFA00C7BD69 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -360,13 +364,26 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		CEC27DF72D50B39F00C7BD69 /* XCRemoteSwiftPackageReference "AlamofireImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/AlamofireImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CEC27DB32D50898B00C7BD69 /* Alamofire */ = {
+		CEC27DBE2D50AAFA00C7BD69 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CEC27DB22D50898B00C7BD69 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = CEC27DBD2D50AAFA00C7BD69 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		CEC27DF82D50B39F00C7BD69 /* AlamofireImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CEC27DF72D50B39F00C7BD69 /* XCRemoteSwiftPackageReference "AlamofireImage" */;
+			productName = AlamofireImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

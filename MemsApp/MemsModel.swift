@@ -24,5 +24,3 @@ struct ResponseWrapper: Codable {
     let success: Bool
     let data: DataClass
 }
-
-

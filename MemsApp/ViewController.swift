@@ -8,10 +8,15 @@
 import UIKit
 import AlamofireImage
 
+protocol ViewControllerDelegate: AnyObject {
+    func add(mem: Meme)
+}
+
 class ViewController: UIViewController {
     
     private let networkManager = NetworkManager.shared
     private var dataModel: [Meme] = []
+    private let storageManager = StorageManager.shared
     
     private let textFieldView = UITextField()
     private let button = UIButton()
@@ -20,14 +25,19 @@ class ViewController: UIViewController {
     private let buttonUnlike = UIButton()
     private let stackView = UIStackView()
     private let infoMessage = UILabel()
+    private var currentMem: Meme!
     
+    weak var delegate: ViewControllerDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+       
         textFieldView.delegate = self
         view.backgroundColor = .white
     }
+    
+
     
     func fetchMems() {
         networkManager.fetchAF { [weak self] result in
@@ -37,6 +47,7 @@ class ViewController: UIViewController {
                     print("Success: \(mem)")
                     self?.dataModel = mem
                     self?.configure(with: mem)
+                    
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -57,6 +68,7 @@ class ViewController: UIViewController {
         }
         
         image.af.setImage(withURL: imageURL)
+        currentMem = randomElement
         print("SetImage")
     }
     
@@ -73,10 +85,17 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func showNext() {
-        //        configure(with: dataModel)
+    @objc func buttonLikeTapped() {
+        guard let meme = currentMem else {
+            print("no mem")
+            return
+        }
+        
+        storageManager.save(mem: meme)
+        print("Saved mem")
         
     }
+    
 }
 
 extension ViewController: UITextFieldDelegate {
@@ -99,6 +118,7 @@ extension ViewController: UITextFieldDelegate {
 private extension ViewController {
     func setupView() {
         addSubviews()
+        setupNavigationBar()
         setupTextField()
         setupButton()
         setupImage()
@@ -113,6 +133,19 @@ private extension ViewController {
         [textFieldView, button, image, buttonLike, buttonUnlike, infoMessage, stackView].forEach {
             view.addSubview($0)
         }
+    }
+    
+    @objc func doneButtonTapped() {
+        
+        let savedVC = SavedViewController(newMems: storageManager.fetchMems())
+        navigationController?.pushViewController(savedVC, animated: true)
+        print("Done button tapped")
+    }
+    
+    func setupNavigationBar() {
+        navigationItem.title = "View Controller"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+        
     }
     
     func setupInfoLabel() {
@@ -151,7 +184,7 @@ private extension ViewController {
         
         buttonLike.widthAnchor.constraint(equalToConstant: 100).isActive = true
         buttonLike.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        buttonLike.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        buttonLike.addTarget(self, action: #selector(buttonLikeTapped), for: .touchUpInside)
     }
     
     func setupButtonUnlike() {
@@ -188,12 +221,11 @@ private extension ViewController {
             textFieldView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             textFieldView.heightAnchor.constraint(equalToConstant: 52),
             
-            infoMessage.topAnchor.constraint(equalTo: textFieldView.bottomAnchor, constant: 8),
+            infoMessage.topAnchor.constraint(equalTo: textFieldView.bottomAnchor, constant: 4),
             infoMessage.leadingAnchor.constraint(equalTo: textFieldView.leadingAnchor, constant: 2),
             infoMessage.trailingAnchor.constraint(equalTo: textFieldView.trailingAnchor, constant: -2),
-            //infoMessage.heightAnchor.constraint(equalToConstant: 20),
-            
-            button.topAnchor.constraint(equalTo: infoMessage.bottomAnchor, constant: 20),
+           
+            button.topAnchor.constraint(equalTo: infoMessage.bottomAnchor, constant: 16),
             button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             button.heightAnchor.constraint(equalToConstant: 52),
@@ -204,13 +236,6 @@ private extension ViewController {
             
             stackView.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 20),
             stackView.centerXAnchor.constraint(equalTo: image.centerXAnchor),
-            
-            
-//            buttonLike.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 20),
-//            buttonLike.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-//            
-//            buttonUnlike.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 20),
-//            buttonUnlike.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             
         ])
     }

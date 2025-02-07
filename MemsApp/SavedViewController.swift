@@ -8,10 +8,11 @@
 import UIKit
 import Alamofire
 
-class SavedViewController: UIViewController {
+final class SavedViewController: UIViewController {
     
     private let tableView = UITableView()
     private var savedMems: [Meme] = []
+    private var savedText: [String] = []
     private let cellIdentifier = "Mem"
     private let storageManager = StorageManager.shared
     
@@ -29,6 +30,7 @@ class SavedViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         savedMems = storageManager.fetchMems()
+        savedText = storageManager.fetchText()
         setupTableView()
         
         tableView.reloadData()
@@ -46,7 +48,8 @@ extension SavedViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CustomCell else { return UITableViewCell()}
         
         let mem = savedMems[indexPath.row]
-        cell.configure(model: mem)
+        let text = savedText[indexPath.row]
+        cell.configure(model: mem, text: text)
         return cell
     }
     
@@ -79,8 +82,9 @@ extension SavedViewController {
 
 
 extension SavedViewController: ViewControllerDelegate {
-    func add(mem: Meme) {
+    func add(mem: Meme, text: String) {
         savedMems.append(mem)
+        savedText.append(text)
         print("Add mem \(mem.name)")
         tableView.reloadData()
     }

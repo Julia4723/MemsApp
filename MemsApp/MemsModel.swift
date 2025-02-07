@@ -14,6 +14,7 @@ struct Meme: Codable {
     let width: Int
     let height: Int
     let box_count: Int
+    
 }
 
 struct DataClass: Codable {
@@ -23,4 +24,8 @@ struct DataClass: Codable {
 struct ResponseWrapper: Codable {
     let success: Bool
     let data: DataClass
+}
+
+struct TextModel: Codable {
+    let text: String
 }

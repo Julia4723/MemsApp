@@ -7,11 +7,12 @@
 
 import UIKit
 
-class StorageManager {
+final class StorageManager {
     static let shared = StorageManager()
     
     private let userDefaults = UserDefaults.standard
     private let memsKey = "mems"
+    private let textKey = "text"
     
     private init() {}
     
@@ -22,12 +23,25 @@ class StorageManager {
         return mems
     }
     
-    func save(mem: Meme) {
+    func fetchText() -> [String] {
+        guard let data = userDefaults.data(forKey: textKey) else { return []}
+        guard let text = try? JSONDecoder().decode([String].self, from: data) else { return []}
+        print("Загружено text: \(text.count)")
+        return text
+    }
+    
+    func save(mem: Meme, text: String) {
         var mems = fetchMems()
         mems.append(mem)
         
+        var texts = fetchText()
+        texts.append(text)
+        
         guard let data = try? JSONEncoder().encode(mems) else {return}
         userDefaults.set(data, forKey: memsKey)
+        
+        guard let data = try? JSONEncoder().encode(texts) else {return}
+        userDefaults.set(data, forKey: textKey)
     }
     
     func delete(at index: Int) {

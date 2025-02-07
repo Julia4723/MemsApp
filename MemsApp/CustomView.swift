@@ -24,8 +24,8 @@ final class CustomView: UIView {
     }
     
    
-    func configure(model: Meme) {
-        nameLabel.text = model.name
+    func configure(model: Meme, text: String) {
+        nameLabel.text = text
 
         if let url = URL(string: model.url) {
             let placeholder = UIImage(systemName: "photo") // Замените на свой placeholder

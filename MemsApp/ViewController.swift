@@ -9,13 +9,15 @@ import UIKit
 import AlamofireImage
 
 protocol ViewControllerDelegate: AnyObject {
-    func add(mem: Meme)
+    func add(mem: Meme, text: String)
+    
 }
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     private let networkManager = NetworkManager.shared
     private var dataModel: [Meme] = []
+    private var textModel: [String] = []
     private let storageManager = StorageManager.shared
     
     private let textFieldView = UITextField()
@@ -26,18 +28,19 @@ class ViewController: UIViewController {
     private let stackView = UIStackView()
     private let infoMessage = UILabel()
     private var currentMem: Meme!
+    private var currentText = String()
     
     weak var delegate: ViewControllerDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-       
+        
         textFieldView.delegate = self
         view.backgroundColor = .white
     }
     
-
+    
     
     func fetchMems() {
         networkManager.fetchAF { [weak self] result in
@@ -90,8 +93,13 @@ class ViewController: UIViewController {
             print("no mem")
             return
         }
+        guard let text = textFieldView.text, !text.isEmpty else {
+            infoMessage.isHidden = false
+            image.image = UIImage(systemName: "xmark")
+            return
+        }
         
-        storageManager.save(mem: meme)
+        storageManager.save(mem: meme, text: currentText)
         print("Saved mem")
         
     }
@@ -104,16 +112,15 @@ extension ViewController: UITextFieldDelegate {
         if !text.isEmpty {
             infoMessage.isHidden = true
         }
+        currentText = text
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textFieldView.resignFirstResponder()
         return true
     }
-
+    
 }
-
-
 
 private extension ViewController {
     func setupView() {
@@ -192,7 +199,7 @@ private extension ViewController {
         buttonUnlike.setTitle("👎🏻", for: .normal)
         buttonUnlike.titleLabel?.font = UIFont.systemFont(ofSize: 50)
         buttonUnlike.layer.cornerRadius = 12
-
+        
         buttonUnlike.widthAnchor.constraint(equalToConstant: 100).isActive = true
         buttonUnlike.heightAnchor.constraint(equalToConstant: 100).isActive = true
         buttonUnlike.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
@@ -224,7 +231,7 @@ private extension ViewController {
             infoMessage.topAnchor.constraint(equalTo: textFieldView.bottomAnchor, constant: 4),
             infoMessage.leadingAnchor.constraint(equalTo: textFieldView.leadingAnchor, constant: 2),
             infoMessage.trailingAnchor.constraint(equalTo: textFieldView.trailingAnchor, constant: -2),
-           
+            
             button.topAnchor.constraint(equalTo: infoMessage.bottomAnchor, constant: 16),
             button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),

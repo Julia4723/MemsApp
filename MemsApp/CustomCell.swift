@@ -21,9 +21,8 @@ final class CustomCell: UITableViewCell {
     }
     
     
-    
-    func configure(model: Meme) {
-        customView.configure(model: model)
+    func configure(model: Meme, text: String) {
+        customView.configure(model: model, text: text)
     }
 }
 
